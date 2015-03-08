@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,8 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.adapters.TweetArrayAdapter;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.models.Tweet;
@@ -23,11 +24,25 @@ import java.util.ArrayList;
 public class TimelineActivity extends ActionBarActivity {
     private ArrayList<Tweet> tweets;
     private TweetArrayAdapter adapter;
+    private SwipeRefreshLayout swipeContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                getTweets(null, tweets.get(0).id);
+            }
+        });
+
 
         tweets = new ArrayList<Tweet>();
         adapter = new TweetArrayAdapter(this, tweets);
@@ -36,26 +51,34 @@ public class TimelineActivity extends ActionBarActivity {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                getTweets(tweets.get(totalItemsCount - 1).id);
+                getTweets(tweets.get(totalItemsCount - 1).id, null);
             }
         });
 
-        getTweets(null);
+        getTweets(null, null);
     }
 
-    protected void getTweets(Long maxId) {
-        TwitterApplication.getRestClient().getHomeTimeline(maxId, new JsonHttpResponseHandler() {
+    protected void getTweets(Long maxId, final Long sinceId) {
+
+        TwitterApplication.getRestClient().getHomeTimeline(maxId, sinceId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 ArrayList<Tweet> tweetsFromJson = Tweet.fromJson(response);
-                tweets.addAll(tweetsFromJson);
+                if (sinceId != null) {
+                    tweets.addAll(0, tweetsFromJson);
+                } else {
+                    tweets.addAll(tweetsFromJson);
+                }
                 adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.e("TAG", "failure", throwable);
                 Log.e("TAG", errorResponse.toString());
+                Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                swipeContainer.setRefreshing(false);
             }
         });
     }
