@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.codepath.apps.twitter.R;
+import com.codepath.apps.twitter.adapters.TweetArrayAdapter;
 import com.codepath.apps.twitter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -19,21 +20,25 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class TimelineActivity extends ActionBarActivity {
+    private ArrayList<Tweet> tweets;
+    private TweetArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        final ArrayAdapter<Tweet> adapter = new ArrayAdapter<Tweet>(this, android.R.layout.simple_list_item_1);
+        tweets = new ArrayList<Tweet>();
+        adapter = new TweetArrayAdapter(this, tweets);
         ListView lvTweets = (ListView) findViewById(R.id.lvTweets);
         lvTweets.setAdapter(adapter);
 
         TwitterApplication.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                ArrayList<Tweet> tweets = Tweet.fromJson(response);
-                adapter.addAll(tweets);
+                ArrayList<Tweet> tweetsFromJson = Tweet.fromJson(response);
+                tweets.addAll(tweetsFromJson);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
