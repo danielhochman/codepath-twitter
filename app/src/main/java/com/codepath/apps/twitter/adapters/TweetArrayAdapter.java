@@ -1,8 +1,12 @@
 package com.codepath.apps.twitter.adapters;
 
 import android.content.Context;
-import android.media.Image;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.TextPaint;
 import android.text.format.DateUtils;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +28,8 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
     }
 
     private static class ViewHolder {
-        TextView tvUser;
+        TextView tvUserName;
+        TextView tvUserScreenName;
         TextView tvRelativeTimestamp;
         TextView tvText;
         ImageView ivUserAvatar;
@@ -38,10 +43,12 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_item_tweet, parent, false);
-            viewHolder.tvUser = (TextView) convertView.findViewById(R.id.tvUser);
+            viewHolder.tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
+            viewHolder.tvUserScreenName = (TextView) convertView.findViewById(R.id.tvUserScreenName);
             viewHolder.tvRelativeTimestamp = (TextView) convertView.findViewById(R.id.tvRelativeTimestamp);
             viewHolder.tvText = (TextView) convertView.findViewById(R.id.tvText);
             viewHolder.ivUserAvatar = (ImageView) convertView.findViewById(R.id.ivUserAvatar);
+            convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -49,8 +56,11 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         Picasso.with(getContext()).load(tweet.profileImageUrl)
                 .noFade().fit().transform(new RoundedTransformation()).into(viewHolder.ivUserAvatar);
 
-        viewHolder.tvUser.setText(tweet.userName + " @" + tweet.userScreenName);
+
+        viewHolder.tvUserName.setText(tweet.userName);
+        viewHolder.tvUserScreenName.setText("@" + tweet.userScreenName);
         viewHolder.tvRelativeTimestamp.setText(getRelativeTimestamp(tweet.createdAt));
+
         viewHolder.tvText.setText(tweet.text);
 
         return convertView;
@@ -61,6 +71,23 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         return DateUtils.getRelativeTimeSpanString(
                 then.getTime(), now.getTime(), DateUtils.SECOND_IN_MILLIS)
                 .toString().replaceAll("(\\d+)\\s(.).+", "$1$2");
+    }
+
+    private Spannable formatHashtagsAndNames(String username, String text) {
+        String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_\\.]+)", "<a href=\"#\">$1</a>");
+
+        // Prevent underlining of links
+        Spannable s = (Spannable) Html.fromHtml(
+                "<b><font color=\"" + getContext().getResources().getColor(R.color.primary_blue) + "\">" + username + "</font></b> " + htmlCommentText);
+        for (URLSpan u: s.getSpans(0, s.length(), URLSpan.class)) {
+            s.setSpan(new UnderlineSpan() {
+                public void updateDrawState(TextPaint tp) {
+                    tp.setUnderlineText(false);
+                }
+            }, s.getSpanStart(u), s.getSpanEnd(u), 0);
+        }
+
+        return s;
     }
 
 }

@@ -4,8 +4,10 @@
     <string name="app_name">CodepathTwitter</string>
 
     <string name="login_label">Log in</string>
-    <string name="title_activity_timeline">Home Timeline</string>
+    <string name="title_activity_timeline"> </string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_compose">Compose</string>
+    <string name="action_logout">Logout</string>
 
 </resources>
