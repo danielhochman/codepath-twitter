@@ -1,6 +1,7 @@
 package com.codepath.apps.twitter;
 
 import android.content.Context;
+import android.widget.ListView;
 
 /*
  * This is the Android application itself and is used to configure various settings
