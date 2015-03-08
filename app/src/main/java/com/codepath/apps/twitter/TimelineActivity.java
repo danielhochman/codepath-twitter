@@ -3,6 +3,7 @@ package com.codepath.apps.twitter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +32,9 @@ public class TimelineActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTimeline);
+        setSupportActionBar(toolbar);
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
