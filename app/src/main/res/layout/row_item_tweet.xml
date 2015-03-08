@@ -58,6 +58,7 @@
         android:id="@+id/tvText"
         android:textSize="13sp"
         android:textColor="@color/grey"
+        android:textColorLink="@color/secondary_blue"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivUserAvatar"

@@ -61,7 +61,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.tvUserScreenName.setText("@" + tweet.userScreenName);
         viewHolder.tvRelativeTimestamp.setText(getRelativeTimestamp(tweet.createdAt));
 
-        viewHolder.tvText.setText(tweet.text);
+        viewHolder.tvText.setText(formatHashtagsAndNames(tweet.text));
 
         return convertView;
     }
@@ -73,12 +73,12 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
                 .toString().replaceAll("(\\d+)\\s(.).+", "$1$2");
     }
 
-    private Spannable formatHashtagsAndNames(String username, String text) {
+    private Spannable formatHashtagsAndNames(String text) {
         String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_\\.]+)", "<a href=\"#\">$1</a>");
+        htmlCommentText = htmlCommentText.replaceAll("(http.*?)[\\s$]", "<a href=\"$1\">$1</a>");
 
         // Prevent underlining of links
-        Spannable s = (Spannable) Html.fromHtml(
-                "<b><font color=\"" + getContext().getResources().getColor(R.color.primary_blue) + "\">" + username + "</font></b> " + htmlCommentText);
+        Spannable s = (Spannable) Html.fromHtml(htmlCommentText);
         for (URLSpan u: s.getSpans(0, s.length(), URLSpan.class)) {
             s.setSpan(new UnderlineSpan() {
                 public void updateDrawState(TextPaint tp) {

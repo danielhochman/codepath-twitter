@@ -102,6 +102,9 @@ public class TimelineActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
+            TwitterClient client = TwitterApplication.getRestClient();
+            client.clearAccessToken();
+            finish();
             return true;
         }
 
