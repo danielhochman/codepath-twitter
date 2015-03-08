@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.adapters.TweetArrayAdapter;
+import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -32,8 +33,18 @@ public class TimelineActivity extends ActionBarActivity {
         adapter = new TweetArrayAdapter(this, tweets);
         ListView lvTweets = (ListView) findViewById(R.id.lvTweets);
         lvTweets.setAdapter(adapter);
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                getTweets(tweets.get(totalItemsCount - 1).id);
+            }
+        });
 
-        TwitterApplication.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
+        getTweets(null);
+    }
+
+    protected void getTweets(Long maxId) {
+        TwitterApplication.getRestClient().getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 ArrayList<Tweet> tweetsFromJson = Tweet.fromJson(response);
