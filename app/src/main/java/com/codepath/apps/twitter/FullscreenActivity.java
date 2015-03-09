@@ -39,7 +39,7 @@ public class FullscreenActivity extends ActionBarActivity {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarSearch);
         progressBar.setVisibility(View.VISIBLE);
 
-        String mediaUrl = getIntent().getStringExtra("mediaUrl");
+        String mediaUrl = getIntent().getStringExtra("mediaUrl") + ":large";
 
         Picasso.with(getApplicationContext())
                 .load(mediaUrl).fit().noFade().centerInside()

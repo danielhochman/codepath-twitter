@@ -38,6 +38,8 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.ic_title_logo_default);
 
+        Log.i("YAH", "starting");
+
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
