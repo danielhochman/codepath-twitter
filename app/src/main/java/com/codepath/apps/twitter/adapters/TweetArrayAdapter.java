@@ -1,6 +1,7 @@
 package com.codepath.apps.twitter.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.text.Html;
 import android.text.Spannable;
@@ -16,7 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.twitter.FullscreenActivity;
 import com.codepath.apps.twitter.R;
+import com.codepath.apps.twitter.TimelineActivity;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.transformations.RoundedTransformation;
 import com.squareup.picasso.Picasso;
@@ -40,7 +43,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
 
         ViewHolder viewHolder;
         if (convertView == null) {
@@ -64,6 +67,14 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
             viewHolder.ivMedia.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(tweet.mediaUrl + ":thumb")
                     .noFade().fit().centerCrop().into(viewHolder.ivMedia);
+            viewHolder.ivMedia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getContext(), FullscreenActivity.class);
+                    i.putExtra("mediaUrl", tweet.mediaUrl);
+                    getContext().startActivity(i);
+                }
+            });
         } else {
             viewHolder.ivMedia.setVisibility(View.GONE);
         }
