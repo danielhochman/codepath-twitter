@@ -6,4 +6,6 @@
     <color name="light_grey">#BBB</color>
     <color name="primary_blue">#55ACEE</color>
     <color name="secondary_blue">#0084B4</color>
+    <color name="red">#BA2326</color>
+    <color name="light_red">#DB9596</color>
 </resources>

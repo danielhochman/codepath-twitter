@@ -35,7 +35,8 @@
         android:layout_below="@id/topComposeToolbar"
         android:id="@+id/llCompose">
         <EditText
-            android:id="@+id/txt_your_name"
+            android:id="@+id/etTweet"
+            android:textColor="@color/grey"
             android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
             android:layout_width="match_parent"  android:layout_height="wrap_content"
             android:imeOptions="actionDone" /></LinearLayout>

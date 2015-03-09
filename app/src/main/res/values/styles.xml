@@ -6,6 +6,8 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+        <item name="actionMenuTextColor">@color/grey</item>
+        <item name="android:actionMenuTextColor">@color/grey</item>
     </style>
 
     <!-- Application theme. -->
@@ -13,7 +15,7 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
 
         <item name="colorPrimary">@color/primary_blue</item>
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/grey</item>
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 

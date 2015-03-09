@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TimelineActivity extends ActionBarActivity{
+public class TimelineActivity extends ActionBarActivity implements ComposeDialog.ComposeDialogListener {
     private ArrayList<Tweet> tweets;
     private TweetArrayAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
@@ -59,6 +59,11 @@ public class TimelineActivity extends ActionBarActivity{
         });
 
         getTweets(null, null);
+    }
+
+    @Override
+    public void onFinishComposeDialog(Tweet tweet) {
+        tweets.add(0, tweet);
     }
 
     protected void getTweets(Long maxId, final Long sinceId) {
