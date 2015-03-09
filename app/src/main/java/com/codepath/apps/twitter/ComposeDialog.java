@@ -65,6 +65,7 @@ public class ComposeDialog extends DialogFragment implements DialogInterface.OnC
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                         Tweet postedTweet = Tweet.fromJson(json);
+                        postedTweet.save();
 
                         ComposeDialogListener listener = (ComposeDialogListener) getActivity();
                         listener.onFinishComposeDialog(postedTweet);

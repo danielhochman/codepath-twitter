@@ -5,6 +5,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.TextPaint;
 import android.text.format.DateUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
@@ -62,6 +63,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.tvRelativeTimestamp.setText(getRelativeTimestamp(tweet.createdAt));
 
         viewHolder.tvText.setText(formatHashtagsAndNames(tweet.text));
+        viewHolder.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
         return convertView;
     }
@@ -74,7 +76,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
     }
 
     private Spannable formatHashtagsAndNames(String text) {
-        String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_\\.]+)", "<a href=\"#\">$1</a>");
+        String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_\\.]+)", "<a>$1</a>");
         htmlCommentText = htmlCommentText.replaceAll("(https?:\\S*)", "<a href=\"$1\">$1</a> ");
 
         // Prevent underlining of links

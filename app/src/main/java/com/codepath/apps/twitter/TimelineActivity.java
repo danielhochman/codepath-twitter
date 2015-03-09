@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,7 +57,13 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
             }
         });
 
-        getTweets(null, null);
+        tweets.addAll(Tweet.getAll());
+        if (tweets.size() == 0) {
+            // no previous cache
+            getTweets(null, null);
+        }
+
+
     }
 
     @Override
@@ -116,7 +121,6 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
             FragmentManager fm = getSupportFragmentManager();
             ComposeDialog composeDialog = ComposeDialog.newInstance();
             composeDialog.show(fm, "fragment_compose");
-
         }
 
         return super.onOptionsItemSelected(item);

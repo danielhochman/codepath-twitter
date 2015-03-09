@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter.models;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -9,16 +10,55 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-public class Tweet {
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Cache;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
+@Table(name = "Tweets", id = "_id")
+public class Tweet extends Model {
+
+    @Column(name = "id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public Long id;
+    @Column(name = "userName")
     public String userName;
+    @Column(name = "userScreenName")
     public String userScreenName;
+    @Column(name = "text")
     public String text;
+    @Column(name = "createdAt")
     public Date createdAt;
+    @Column(name = "profileImageUrl")
     public String profileImageUrl;
+
+    public Tweet() {
+        super();
+    }
+
+    public Tweet(Long id, String userName, String userScreenName, String text, Date createdAt, String profileImageUrl){
+        super();
+        this.id = id;
+        this.userName = userName;
+        this.userScreenName = userScreenName;
+        this.text = text;
+        this.createdAt = createdAt;
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public static List<Tweet> getAll() {
+        return new Select()
+                .from(Tweet.class)
+                .orderBy("id DESC")
+                .limit(1000)
+                .execute();
+    }
+
+
 
     public static Tweet fromJson(JSONObject json) {
         Tweet tweet = new Tweet();
@@ -48,7 +88,7 @@ public class Tweet {
         for (int i = 0; i < json.length(); i++) {
             try {
                 Tweet tweet = fromJson(json.getJSONObject(i));
-                if(tweet != null) {
+                if (tweet != null) {
                     tweets.add(tweet);
                 }
             } catch (JSONException e) {
@@ -56,6 +96,17 @@ public class Tweet {
                 continue;
             }
         }
+
+        ActiveAndroid.beginTransaction();
+        try {
+            for (Tweet tweet : tweets) {
+                tweet.save();
+            }
+            ActiveAndroid.setTransactionSuccessful();
+        } finally {
+            ActiveAndroid.endTransaction();
+        }
+
         return tweets;
     }
 }
