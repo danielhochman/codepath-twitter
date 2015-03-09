@@ -3,7 +3,7 @@
 
     <string name="app_name">CodepathTwitter</string>
 
-    <string name="login_label">Log in</string>
+    <string name="login_label">Connect with Twitter</string>
     <string name="title_activity_timeline"> </string>
 
     <string name="action_settings">Settings</string>
