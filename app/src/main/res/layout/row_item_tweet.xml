@@ -64,7 +64,18 @@
         android:textColorLink="@color/secondary_blue"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/tvUserName"
+        android:layout_toLeftOf="@+id/ivMedia"
         android:layout_toRightOf="@+id/ivUserAvatar"
         android:layout_toEndOf="@+id/ivUserAvatar" />
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/ivMedia"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@id/tvRelativeTimestamp"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

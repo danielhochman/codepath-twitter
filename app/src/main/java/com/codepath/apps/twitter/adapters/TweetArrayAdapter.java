@@ -1,6 +1,7 @@
 package com.codepath.apps.twitter.adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.TextPaint;
@@ -34,6 +35,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         TextView tvRelativeTimestamp;
         TextView tvText;
         ImageView ivUserAvatar;
+        ImageView ivMedia;
     }
 
     @Override
@@ -49,6 +51,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
             viewHolder.tvRelativeTimestamp = (TextView) convertView.findViewById(R.id.tvRelativeTimestamp);
             viewHolder.tvText = (TextView) convertView.findViewById(R.id.tvText);
             viewHolder.ivUserAvatar = (ImageView) convertView.findViewById(R.id.ivUserAvatar);
+            viewHolder.ivMedia = (ImageView) convertView.findViewById(R.id.ivMedia);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -57,6 +60,13 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         Picasso.with(getContext()).load(tweet.profileImageUrl)
                 .noFade().fit().transform(new RoundedTransformation()).into(viewHolder.ivUserAvatar);
 
+        if (tweet.mediaUrl != null) {
+            viewHolder.ivMedia.setVisibility(View.VISIBLE);
+            Picasso.with(getContext()).load(tweet.mediaUrl + ":thumb")
+                    .noFade().fit().centerCrop().into(viewHolder.ivMedia);
+        } else {
+            viewHolder.ivMedia.setVisibility(View.GONE);
+        }
 
         viewHolder.tvUserName.setText(tweet.userName);
         viewHolder.tvUserScreenName.setText("@" + tweet.userScreenName);

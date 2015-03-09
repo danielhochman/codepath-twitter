@@ -1,6 +1,5 @@
 package com.codepath.apps.twitter.models;
 
-import android.database.Cursor;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -35,12 +34,14 @@ public class Tweet extends Model {
     public Date createdAt;
     @Column(name = "profileImageUrl")
     public String profileImageUrl;
+    @Column(name = "mediaUrl")
+    public String mediaUrl;
 
     public Tweet() {
         super();
     }
 
-    public Tweet(Long id, String userName, String userScreenName, String text, Date createdAt, String profileImageUrl){
+    public Tweet(Long id, String userName, String userScreenName, String text, Date createdAt, String profileImageUrl, String mediaUrl){
         super();
         this.id = id;
         this.userName = userName;
@@ -48,6 +49,7 @@ public class Tweet extends Model {
         this.text = text;
         this.createdAt = createdAt;
         this.profileImageUrl = profileImageUrl;
+        this.mediaUrl = mediaUrl;
     }
 
     public static List<Tweet> getAll() {
@@ -76,6 +78,12 @@ public class Tweet extends Model {
             tweet.userName = json.getJSONObject("user").getString("name");
             tweet.userScreenName = json.getJSONObject("user").getString("screen_name");
             tweet.profileImageUrl = json.getJSONObject("user").getString("profile_image_url");
+
+            try {
+                tweet.mediaUrl = json.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url");
+            } catch (JSONException e) {
+                // nothing
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
