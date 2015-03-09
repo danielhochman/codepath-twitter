@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.codepath.apps.twitter.adapters.TweetArrayAdapter;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.models.Tweet;
@@ -113,6 +114,7 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
+            new Delete().from(Tweet.class).execute();
             TwitterClient client = TwitterApplication.getRestClient();
             client.clearAccessToken();
             finish();
