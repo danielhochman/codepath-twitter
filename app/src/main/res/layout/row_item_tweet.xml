@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:id="@+id/row_item_tweet" android:paddingTop="8dp" android:paddingBottom="8dp">
+    android:id="@+id/row_item_tweet" android:paddingTop="8dp" android:paddingBottom="8dp"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
+    android:descendantFocusability="blocksDescendants">
 
     <ImageView
         android:layout_width="40dp"

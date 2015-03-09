@@ -75,7 +75,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 
     private Spannable formatHashtagsAndNames(String text) {
         String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_\\.]+)", "<a href=\"#\">$1</a>");
-        htmlCommentText = htmlCommentText.replaceAll("(http.*?)[\\s$]", "<a href=\"$1\">$1</a>");
+        htmlCommentText = htmlCommentText.replaceAll("(http:\\S*)", "<a href=\"$1\">$1</a> ");
 
         // Prevent underlining of links
         Spannable s = (Spannable) Html.fromHtml(htmlCommentText);

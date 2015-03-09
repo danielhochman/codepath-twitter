@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TimelineActivity extends ActionBarActivity {
+public class TimelineActivity extends ActionBarActivity{
     private ArrayList<Tweet> tweets;
     private TweetArrayAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
@@ -106,6 +107,11 @@ public class TimelineActivity extends ActionBarActivity {
             client.clearAccessToken();
             finish();
             return true;
+        } else if (id == R.id.miCompose) {
+            FragmentManager fm = getSupportFragmentManager();
+            ComposeDialog composeDialog = ComposeDialog.newInstance();
+            composeDialog.show(fm, "fragment_compose");
+
         }
 
         return super.onOptionsItemSelected(item);
