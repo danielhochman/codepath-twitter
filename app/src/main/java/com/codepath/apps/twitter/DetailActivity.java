@@ -1,26 +1,37 @@
 package com.codepath.apps.twitter;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.transformations.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
-public class DetailActivity extends ActionBarActivity {
+public class DetailActivity extends ActionBarActivity implements ComposeDialog.ComposeDialogListener {
+
+    @Override
+    public void onFinishComposeDialog(Tweet tweet) {
+        tweet.save();
+        Intent data = new Intent();
+        data.putExtra("tweetId", tweet.id);
+        setResult(RESULT_OK, data);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_detail);
+
         Long id = getIntent().getLongExtra("tweetId", 0);
         final Tweet tweet = Tweet.getTweetById(id);
 
@@ -30,6 +41,7 @@ public class DetailActivity extends ActionBarActivity {
         TextView tvUserScreenName = (TextView) findViewById(R.id.tvDetailUserScreenName);
         ImageView ivProfile = (ImageView) findViewById(R.id.ivDetailProfile);
         ImageView ivMedia = (ImageView) findViewById(R.id.ivDetailImagePreview);
+        ImageButton ibtnReply = (ImageButton) findViewById(R.id.ibtnReply);
 
         tvText.setText(tweet.text);
         tvUserName.setText(tweet.userName);
@@ -55,6 +67,15 @@ public class DetailActivity extends ActionBarActivity {
             ivMedia.setVisibility(View.GONE);
         }
 
+        ibtnReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                ComposeDialog composeDialog = ComposeDialog.newInstance(tweet.id);
+                composeDialog.show(fm, "fragment_compose");
+            }
+        });
+
     }
 
 
@@ -73,7 +94,7 @@ public class DetailActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_reply) {
             return true;
         }
 

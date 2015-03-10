@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context="com.codepath.apps.twitter.DetailActivity">
-
 
     <ImageView
         android:layout_width="60dp"
@@ -21,6 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvDetailUserName"
+        android:layout_toLeftOf="@+id/tvDetailRelativeTimestamp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_marginRight="5dp"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@color/black"
@@ -32,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvDetailUserScreenName"
+        android:textSize="16dp"
         android:fontFamily="sans-serif-light"
         android:layout_below="@+id/tvDetailUserName"
         android:layout_alignLeft="@+id/tvDetailUserName"
@@ -41,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="italic"
-        android:layout_alignBottom="@+id/tvUserName"
+        android:layout_alignBottom="@+id/tvDetailUserName"
         android:gravity="bottom"
         android:fontFamily="sans-serif-light"
         android:id="@+id/tvDetailRelativeTimestamp"
@@ -56,6 +62,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvDetailText"
         android:textSize="21sp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:textColor="@color/grey"
@@ -71,16 +78,26 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:src="@drawable/ic_gallery_action_reply_default"
+        android:background="@color/light_grey"
+        android:id="@+id/ibtnReply"
+        android:layout_below="@+id/tvDetailFavoriteInfo"
+        android:layout_centerHorizontal="true" />
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:id="@+id/ivDetailImagePreview"
         android:visibility="gone"
-        android:layout_below="@+id/tvDetailFavoriteInfo"
+        android:layout_below="@+id/ibtnReply"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

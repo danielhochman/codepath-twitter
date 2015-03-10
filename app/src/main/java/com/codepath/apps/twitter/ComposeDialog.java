@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.twitter.models.Tweet;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -27,14 +26,17 @@ import org.json.JSONObject;
 public class ComposeDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
     private EditText mEditText;
+    private Tweet tweet;
+    private Long tweetReply;
 
     public ComposeDialog() {
         // Empty constructor required for DialogFragment
     }
 
-    public static ComposeDialog newInstance() {
+    public static ComposeDialog newInstance(Long tweetId) {
         ComposeDialog frag = new ComposeDialog();
         Bundle args = new Bundle();
+        args.putLong("tweetId", tweetId);
         frag.setArguments(args);
         return frag;
     }
@@ -57,11 +59,28 @@ public class ComposeDialog extends DialogFragment implements DialogInterface.OnC
         final TextView tvCharCount = (TextView) view.findViewById(R.id.tvCharCount);
         tvCharCount.setText("140");
 
+        Long tweetId = getArguments().getLong("tweetId", -1L);
+        if (tweetId != -1L) {
+            tweet = Tweet.getTweetById(tweetId);
+            tweetReply = tweet.id;
+            String seed = " RT @" + tweet.userScreenName + " " + tweet.text;
+
+            mEditText.setText(seed);
+
+            int remaining = 140 - seed.length();
+            if (remaining >= 0) {
+                tvCharCount.setTextColor(getResources().getColor(R.color.grey));
+            } else {
+                tvCharCount.setTextColor(getResources().getColor(R.color.red));
+            }
+            tvCharCount.setText("" + remaining);
+        }
+
         ImageButton btnSend = (ImageButton) view.findViewById(R.id.btnSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TwitterApplication.getRestClient().submitNewTweet(mEditText.getText().toString(), new JsonHttpResponseHandler() {
+                TwitterApplication.getRestClient().submitNewTweet(mEditText.getText().toString(), tweetReply, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                         Tweet postedTweet = Tweet.fromJson(json);
@@ -110,6 +129,8 @@ public class ComposeDialog extends DialogFragment implements DialogInterface.OnC
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        mEditText.setSelection(0);
 
         return view;
     }

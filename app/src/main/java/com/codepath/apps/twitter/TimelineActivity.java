@@ -27,6 +27,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class TimelineActivity extends ActionBarActivity implements ComposeDialog.ComposeDialogListener {
+
+    private final int REQUEST_CODE = 20;
     private ArrayList<Tweet> tweets;
     private TweetArrayAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
@@ -41,7 +43,6 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.ic_title_logo_default);
 
-        Log.i("YAH", "starting");
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -67,7 +68,7 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
                 i.putExtra("tweetId", tweets.get(position).id);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE);
             }
         });
 
@@ -78,6 +79,14 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
         }
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            Tweet tweet = Tweet.getTweetById(data.getLongExtra("tweetId", -1L));
+            tweets.add(0, tweet);
+        }
     }
 
     @Override
@@ -134,7 +143,7 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
             return true;
         } else if (id == R.id.miCompose) {
             FragmentManager fm = getSupportFragmentManager();
-            ComposeDialog composeDialog = ComposeDialog.newInstance();
+            ComposeDialog composeDialog = ComposeDialog.newInstance(-1L);
             composeDialog.show(fm, "fragment_compose");
         }
 

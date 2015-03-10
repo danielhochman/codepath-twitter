@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.activeandroid.ActiveAndroid;
-import com.activeandroid.Cache;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
