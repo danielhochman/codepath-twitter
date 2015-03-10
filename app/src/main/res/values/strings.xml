@@ -10,5 +10,8 @@
     <string name="action_compose">Compose</string>
     <string name="action_logout">Logout</string>
     <string name="compose_prompt">What\'s up?</string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+    <string name="intro">Sign in to get started!</string>
 
 </resources>
