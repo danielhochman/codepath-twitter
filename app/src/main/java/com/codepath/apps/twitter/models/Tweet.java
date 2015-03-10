@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter.models;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -58,6 +59,25 @@ public class Tweet extends Model {
                 .orderBy("id DESC")
                 .limit(1000)
                 .execute();
+    }
+
+    public static Tweet getTweetById(Long id) {
+        return new Select()
+                .from(Tweet.class)
+                .where("id = ?", id)
+                .executeSingle();
+    }
+
+    public String getRelativeTimestamp(boolean abbreviated) {
+        Date now = new Date();
+        String relativeTimestamp = DateUtils.getRelativeTimeSpanString(
+                this.createdAt.getTime(), now.getTime(), DateUtils.SECOND_IN_MILLIS).toString();
+
+        if (abbreviated) {
+            return relativeTimestamp.replaceAll("(\\d+)\\s(.).+", "$1$2");
+        } else {
+            return relativeTimestamp;
+        }
     }
 
 

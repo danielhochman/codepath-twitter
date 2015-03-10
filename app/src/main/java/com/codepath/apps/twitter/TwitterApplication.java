@@ -1,7 +1,10 @@
 package com.codepath.apps.twitter;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.widget.ListView;
+
+import java.util.Date;
 
 /*
  * This is the Android application itself and is used to configure various settings

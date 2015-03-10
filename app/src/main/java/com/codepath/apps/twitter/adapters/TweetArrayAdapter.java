@@ -81,7 +81,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 
         viewHolder.tvUserName.setText(tweet.userName);
         viewHolder.tvUserScreenName.setText("@" + tweet.userScreenName);
-        viewHolder.tvRelativeTimestamp.setText(getRelativeTimestamp(tweet.createdAt));
+        viewHolder.tvRelativeTimestamp.setText(tweet.getRelativeTimestamp(true));
 
         viewHolder.tvText.setText(formatHashtagsAndNames(tweet.text));
         viewHolder.tvText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -89,12 +89,6 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         return convertView;
     }
 
-    protected String getRelativeTimestamp(Date then) {
-        Date now = new Date();
-        return DateUtils.getRelativeTimeSpanString(
-                then.getTime(), now.getTime(), DateUtils.SECOND_IN_MILLIS)
-                .toString().replaceAll("(\\d+)\\s(.).+", "$1$2");
-    }
 
     private Spannable formatHashtagsAndNames(String text) {
         String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_\\.]+)", "<a>$1</a>");

@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -57,6 +60,14 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 getTweets(tweets.get(totalItemsCount - 1).id, null);
+            }
+        });
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
+                i.putExtra("tweetId", tweets.get(position).id);
+                startActivity(i);
             }
         });
 
