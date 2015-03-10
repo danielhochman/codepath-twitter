@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.twitter.adapters.TweetArrayAdapter;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.transformations.RoundedTransformation;
 import com.squareup.picasso.Picasso;
@@ -43,7 +45,8 @@ public class DetailActivity extends ActionBarActivity implements ComposeDialog.C
         ImageView ivMedia = (ImageView) findViewById(R.id.ivDetailImagePreview);
         ImageButton ibtnReply = (ImageButton) findViewById(R.id.ibtnReply);
 
-        tvText.setText(tweet.text);
+        tvText.setText(TweetArrayAdapter.formatHashtagsAndNames(tweet.text));
+        tvText.setMovementMethod(LinkMovementMethod.getInstance());
         tvUserName.setText(tweet.userName);
         tvUserScreenName.setText("@" + tweet.userScreenName);
         tvRelativeTimestamp.setText(tweet.getRelativeTimestamp(false));

@@ -90,7 +90,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
     }
 
 
-    private Spannable formatHashtagsAndNames(String text) {
+    public static Spannable formatHashtagsAndNames(String text) {
         String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_\\.]+)", "<a>$1</a>");
         htmlCommentText = htmlCommentText.replaceAll("(https?:\\S*)", "<a href=\"$1\">$1</a> ");
 
