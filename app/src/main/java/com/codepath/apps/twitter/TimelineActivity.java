@@ -45,6 +45,9 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
         }
     }
 
+    /**
+     * Reply passed from detail view since it launches the compose dialog fragment
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == TweetsListFragment.REQUEST_CODE) {
@@ -53,13 +56,13 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
         }
     }
 
+    /**
+     * Compose from toolbar button
+     */
     @Override
     public void onFinishComposeDialog(Tweet tweet) {
         fragmentTweetsList.addTweet(tweet);
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
