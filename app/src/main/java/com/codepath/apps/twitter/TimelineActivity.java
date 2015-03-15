@@ -1,31 +1,22 @@
 package com.codepath.apps.twitter;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
-import com.codepath.apps.twitter.adapters.TweetArrayAdapter;
+import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.twitter.fragments.HomeTimelineFragment;
+import com.codepath.apps.twitter.fragments.MentionsTimelineFragment;
 import com.codepath.apps.twitter.fragments.TweetsListFragment;
-import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.models.Tweet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class TimelineActivity extends ActionBarActivity implements ComposeDialog.ComposeDialogListener {
 
@@ -40,9 +31,11 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.ic_title_logo_default);
 
-        if (savedInstanceState == null) {
-            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-        }
+        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+
+        PagerSlidingTabStrip pstsTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        pstsTabs.setViewPager(vpPager);
     }
 
     /**
@@ -52,7 +45,6 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == TweetsListFragment.REQUEST_CODE) {
             fragmentTweetsList.addTweet(data.getLongExtra("tweetId", -1L));
-
         }
     }
 
@@ -92,5 +84,34 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+        private String tabTitles[] = {"Home", "Mentions"};
+
+        public TweetsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new HomeTimelineFragment();
+            } else if (position == 1) {
+                return new MentionsTimelineFragment();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
     }
 }

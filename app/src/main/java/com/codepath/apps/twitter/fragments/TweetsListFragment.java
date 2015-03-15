@@ -5,26 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.codepath.apps.twitter.DetailActivity;
 import com.codepath.apps.twitter.R;
-import com.codepath.apps.twitter.TimelineActivity;
-import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.adapters.TweetArrayAdapter;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.models.Tweet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -78,8 +69,6 @@ public abstract class TweetsListFragment extends Fragment {
         Tweet tweet = Tweet.getTweetById(id);
         addTweet(tweet);
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
