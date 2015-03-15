@@ -28,13 +28,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TweetsListFragment extends Fragment {
+public abstract class TweetsListFragment extends Fragment {
 
     public final static int REQUEST_CODE = 20;
 
-    private ArrayList<Tweet> tweets;
-    private TweetArrayAdapter adapter;
-    private SwipeRefreshLayout swipeContainer;
+    abstract void getTweets(Long maxId, Long sinceId);
+
+    protected ArrayList<Tweet> tweets;
+    protected TweetArrayAdapter adapter;
+    protected SwipeRefreshLayout swipeContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,30 +79,7 @@ public class TweetsListFragment extends Fragment {
         addTweet(tweet);
     }
 
-    protected void getTweets(Long maxId, final Long sinceId) {
 
-        TwitterApplication.getRestClient().getHomeTimeline(maxId, sinceId, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                ArrayList<Tweet> tweetsFromJson = Tweet.fromJson(response);
-                if (sinceId != null) {
-                    tweets.addAll(0, tweetsFromJson);
-                } else {
-                    tweets.addAll(tweetsFromJson);
-                }
-                adapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.e("TAG", "failure", throwable);
-                Log.e("TAG", errorResponse.toString());
-                Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                swipeContainer.setRefreshing(false);
-            }
-        });
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
