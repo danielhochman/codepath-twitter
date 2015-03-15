@@ -77,10 +77,5 @@ public abstract class TweetsListFragment extends Fragment {
         tweets = new ArrayList<Tweet>();
         adapter = new TweetArrayAdapter(getActivity(), tweets);
 
-        tweets.addAll(Tweet.getAll());
-        if (tweets.size() == 0) {
-            // no previous cache
-            getTweets(null, null);
-        }
     }
 }
