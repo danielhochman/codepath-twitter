@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:name="com.codepath.apps.twitter.fragments.TweetsListFragment"
-        android:id="@+id/fragment"
+        android:id="@+id/fragment_timeline"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         tools:layout="@layout/fragment_tweets_list"

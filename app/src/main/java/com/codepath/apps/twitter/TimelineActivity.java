@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
 import com.codepath.apps.twitter.adapters.TweetArrayAdapter;
+import com.codepath.apps.twitter.fragments.TweetsListFragment;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -28,11 +29,7 @@ import java.util.ArrayList;
 
 public class TimelineActivity extends ActionBarActivity implements ComposeDialog.ComposeDialogListener {
 
-    private final int REQUEST_CODE = 20;
-    private ArrayList<Tweet> tweets;
-    private TweetArrayAdapter adapter;
-    private SwipeRefreshLayout swipeContainer;
-
+    private TweetsListFragment fragmentTweetsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,81 +40,25 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.ic_title_logo_default);
 
-
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getTweets(null, tweets.get(0).id);
-            }
-        });
-
-
-        tweets = new ArrayList<Tweet>();
-        adapter = new TweetArrayAdapter(this, tweets);
-        ListView lvTweets = (ListView) findViewById(R.id.lvTweets);
-        lvTweets.setAdapter(adapter);
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                getTweets(tweets.get(totalItemsCount - 1).id, null);
-            }
-        });
-        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
-                i.putExtra("tweetId", tweets.get(position).id);
-                startActivityForResult(i, REQUEST_CODE);
-            }
-        });
-
-        tweets.addAll(Tweet.getAll());
-        if (tweets.size() == 0) {
-            // no previous cache
-            getTweets(null, null);
+        if (savedInstanceState == null) {
+            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
         }
-
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            Tweet tweet = Tweet.getTweetById(data.getLongExtra("tweetId", -1L));
-            tweets.add(0, tweet);
+        if (resultCode == RESULT_OK && requestCode == TweetsListFragment.REQUEST_CODE) {
+            fragmentTweetsList.addTweet(data.getLongExtra("tweetId", -1L));
+
         }
     }
 
     @Override
     public void onFinishComposeDialog(Tweet tweet) {
-        tweets.add(0, tweet);
+        fragmentTweetsList.addTweet(tweet);
     }
 
-    protected void getTweets(Long maxId, final Long sinceId) {
 
-        TwitterApplication.getRestClient().getHomeTimeline(maxId, sinceId, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                ArrayList<Tweet> tweetsFromJson = Tweet.fromJson(response);
-                if (sinceId != null) {
-                    tweets.addAll(0, tweetsFromJson);
-                } else {
-                    tweets.addAll(tweetsFromJson);
-                }
-                adapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.e("TAG", "failure", throwable);
-                Log.e("TAG", errorResponse.toString());
-                Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                swipeContainer.setRefreshing(false);
-            }
-        });
-    }
 
 
     @Override
