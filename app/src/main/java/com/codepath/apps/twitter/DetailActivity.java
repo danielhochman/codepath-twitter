@@ -53,6 +53,14 @@ public class DetailActivity extends ActionBarActivity implements ComposeDialog.C
 
         Picasso.with(this).load(tweet.profileImageUrl)
                 .noFade().fit().transform(new RoundedTransformation()).into(ivProfile);
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DetailActivity.this, ProfileActivity.class);
+                i.putExtra("screenName", tweet.userScreenName);
+                startActivity(i);
+            }
+        });
 
         if (tweet.mediaUrl != null) {
             ivMedia.setVisibility(View.VISIBLE);

@@ -81,6 +81,9 @@ public class TimelineActivity extends ActionBarActivity implements ComposeDialog
             FragmentManager fm = getSupportFragmentManager();
             ComposeDialog composeDialog = ComposeDialog.newInstance(-1L);
             composeDialog.show(fm, "fragment_compose");
+        } else if (id == R.id.miProfile) {
+            Intent i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
