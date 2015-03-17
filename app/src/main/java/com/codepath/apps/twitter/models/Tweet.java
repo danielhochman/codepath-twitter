@@ -36,6 +36,8 @@ public class Tweet extends Model {
     public String profileImageUrl;
     @Column(name = "mediaUrl")
     public String mediaUrl;
+    @Column(name = "context")
+    public String context;
 
     public Tweet() {
         super();
@@ -52,10 +54,11 @@ public class Tweet extends Model {
         this.mediaUrl = mediaUrl;
     }
 
-    public static List<Tweet> getAll() {
+    public static List<Tweet> getAllForContext(String context) {
         return new Select()
                 .from(Tweet.class)
                 .orderBy("id DESC")
+                .where("context = ?", context)
                 .limit(1000)
                 .execute();
     }
@@ -123,7 +126,10 @@ public class Tweet extends Model {
                 continue;
             }
         }
+        return tweets;
+    }
 
+    public static void saveTweets(ArrayList<Tweet> tweets) {
         ActiveAndroid.beginTransaction();
         try {
             for (Tweet tweet : tweets) {
@@ -133,7 +139,5 @@ public class Tweet extends Model {
         } finally {
             ActiveAndroid.endTransaction();
         }
-
-        return tweets;
     }
 }

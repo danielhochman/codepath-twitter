@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.twitter.FullscreenActivity;
+import com.codepath.apps.twitter.ProfileActivity;
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TimelineActivity;
 import com.codepath.apps.twitter.models.Tweet;
@@ -62,6 +63,14 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 
         Picasso.with(getContext()).load(tweet.profileImageUrl)
                 .noFade().fit().transform(new RoundedTransformation()).into(viewHolder.ivUserAvatar);
+        viewHolder.ivUserAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra("screenName", tweet.userScreenName);
+                getContext().startActivity(i);
+            }
+        });
 
         if (tweet.mediaUrl != null) {
             viewHolder.ivMedia.setVisibility(View.VISIBLE);

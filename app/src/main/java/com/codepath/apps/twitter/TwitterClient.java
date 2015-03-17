@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /*
@@ -61,12 +62,47 @@ public class TwitterClient extends OAuthBaseClient {
 //        }
         client.post(apiUrl, params, handler);
     }
-	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json");
-	 * 2. Define the parameters to pass to the request (query or body)
-	 *    i.e RequestParams params = new RequestParams("foo", "bar");
-	 * 3. Define the request method and make a call to the client
-	 *    i.e client.get(apiUrl, params, handler);
-	 *    i.e client.post(apiUrl, params, handler);
-	 */
+
+    public void getMentionsTimeline(Long maxId, Long sinceId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+        RequestParams params = new RequestParams();
+        if (maxId != null) {
+            params.put("max_id", maxId);
+        }
+        if (sinceId != null) {
+            params.put("since_id", sinceId);
+        }
+        params.put("count", 25);
+        client.get(apiUrl, params, handler);
+    }
+
+    public void getUserTimeline(String screenName, Long maxId, Long sinceId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+        RequestParams params = new RequestParams();
+        if (maxId != null) {
+            params.put("max_id", maxId);
+        }
+        if (sinceId != null) {
+            params.put("since_id", sinceId);
+        }
+        if (screenName != null) {
+            params.put("screen_name", screenName);
+        }
+        params.put("count", 25);
+        client.get(apiUrl, params, handler);
+    }
+
+    public void getUser(String screenName, AsyncHttpResponseHandler handler) {
+        String apiUrl;
+        if (screenName == null || screenName.equals("")) {
+            apiUrl = getApiUrl("account/verify_credentials.json");
+        } else {
+            apiUrl = getApiUrl("users/show.json");
+        }
+        RequestParams params = new RequestParams();
+        if (screenName != null) {
+            params.put("screen_name", screenName);
+        }
+        client.get(apiUrl, params, handler);
+    }
 }

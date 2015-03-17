@@ -6,6 +6,9 @@
     <item android:id="@+id/miCompose" android:title="@string/action_compose"
         android:icon="@drawable/ic_toolbar_compose_write" app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/miProfile" android:title="@string/action_profile"
+        android:icon="@drawable/ic_profile" app:showAsAction="ifRoom"/>
+
     <item android:id="@+id/action_logout" android:title="@string/action_logout"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>
